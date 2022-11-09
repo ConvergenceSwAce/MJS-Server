@@ -4,6 +4,7 @@ const menu12Schema = new Schema({
   date: {
     type: SchemaTypes.Date,
     required: true,
+    unique: true,
   },
   day: {
     type: SchemaTypes.String,
