@@ -8,6 +8,41 @@ import Menu12 from '../models/menu12';
 
 const router = Router();
 
+// 식단 조회
+router.get(
+  '/', 
+  [
+    check('cafeteria').notEmpty().toInt(), 
+    check('start').notEmpty().toDate(),
+    check('end').notEmpty().toDate()
+  ], 
+  async(req: Request, res: Response) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(500).json({ errors: errors.array() });
+  } 
+  const { cafeteria, start, end } = req.query
+  try {
+    switch (parseInt(cafeteria as string, 10)) {
+      case 0:
+        const menu0Arr = await Menu0.find({ date: { "$gte": start, "$lte": end } })
+        return res.json(menu0Arr)
+      case 10:
+        const menu10Arr = await Menu10.find({ date: { "$gte": start, "$lte": end } })
+        return res.json(menu10Arr)
+      case 11:
+        const menu11Arr = await Menu11.find({ date: { "$gte": start, "$lte": end } })
+        return res.json(menu11Arr)
+      case 12:
+        const menu12Arr = await Menu12.find({ date: { "$gte": start, "$lte": end } })
+        return res.json(menu12Arr)
+    }
+  } catch (error: unknown) {
+    console.error(error);
+    return res.status(500).json('error')
+  }
+})
+
 // 식단 입력
 router.post(
   '/',
@@ -74,7 +109,6 @@ router.patch('/', [
     console.error(error);
     return res.status(500).json('error')
   }
-  
   res.send('ok');
 });
 
