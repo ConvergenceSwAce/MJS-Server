@@ -5,7 +5,17 @@
   "tabWidth": 2,
   "trailingComma": "all",
   "printWidth": 80,
-  "parser": "babel",
+  "parser": "typescript",
   "bracketSpacing": true,
-  "arrowParens": "avoid"
+  "arrowParens": "always",
+  "quoteProps": "consistent",
+  "endOfLine": "lf",
+  "overrides": [
+    {
+      "files": ["*.mts", "*.cts", "*.ts"],
+      "options": {
+        "parser": "typescript"
+      }
+    }
+  ]
 }
