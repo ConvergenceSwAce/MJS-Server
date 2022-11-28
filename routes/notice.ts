@@ -1,14 +1,14 @@
 import { Request, Response, Router } from 'express';
 import { check, validationResult } from 'express-validator';
-import { Notice } from './../interfaces/notice';
-import Notices from '../models/notice';
+import { NoticeDto } from '../interfaces/noticeDto';
+import Notice from '../models/notice';
 
 const router = Router();
 
 // 전체 공지사항 조회
 router.get('/all', async (req: Request, res: Response) => {
   try {
-    const notice = await Notices.find();
+    const notice = await Notice.find();
     return res.json(notice);
   } catch (error: unknown) {
     console.error(error);
@@ -27,7 +27,7 @@ router.get(
     }
     try {
       const { _id } = req.query;
-      const notice = await Notices.find({
+      const notice = await Notice.find({
         _id,
       });
       return res.json(notice);
@@ -48,8 +48,8 @@ router.post(
       return res.status(500).json({ errors: errors.array() });
     }
     try {
-      const notice: Notice = req.body;
-      await Notices.create(notice);
+      const notice: NoticeDto = req.body;
+      await Notice.create(notice);
       return res.json({ message: 'success' });
     } catch (error: unknown) {
       console.error(error);
@@ -65,7 +65,7 @@ router.patch(
   async (req: Request, res: Response) => {
     try {
       const { _id, ...info } = req.body;
-      const exNotice = await Notices.findByIdAndUpdate(_id, info);
+      const exNotice = await Notice.findByIdAndUpdate(_id, info);
       if (!exNotice) throw new Error('공지사항 정보가 없습니다.');
       return res.json({ message: 'success' });
     } catch (error: unknown) {
@@ -86,7 +86,7 @@ router.delete(
     }
     try {
       const { _id } = req.query;
-      await Notices.deleteOne({
+      await Notice.deleteOne({
         _id,
       });
       return res.json({ message: 'success' });

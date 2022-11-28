@@ -1,4 +1,4 @@
-export interface Menu {
+export interface MenuDto {
   date: Date;
   day: string;
   cafeteria: number;

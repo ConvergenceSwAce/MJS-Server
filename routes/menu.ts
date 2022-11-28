@@ -1,6 +1,6 @@
 import { Request, Response, Router } from 'express';
 import { check, validationResult } from 'express-validator';
-import { Menu } from '../interfaces/menu';
+import { MenuDto } from '../interfaces/menuDto';
 import Menu0 from '../models/menu0';
 import Menu10 from '../models/menu10';
 import Menu11 from '../models/menu11';
@@ -66,7 +66,7 @@ router.post(
       return res.status(500).json({ errors: errors.array() });
     }
     try {
-      const menu: Menu = req.body;
+      const menu: MenuDto = req.body;
       switch (req.body.cafeteria) {
         case 0:
           await Menu0.create(menu);

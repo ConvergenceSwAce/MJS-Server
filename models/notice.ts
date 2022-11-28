@@ -11,5 +11,5 @@ const noticeSchema = new Schema({
   },
 });
 
-const Notices = model('Notices', noticeSchema, 'notices');
-export default Notices;
+const Notice = model('Notice', noticeSchema, 'notice');
+export default Notice;
