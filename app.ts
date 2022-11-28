@@ -2,6 +2,7 @@ import 'dotenv/config';
 import express, { Express } from 'express';
 import mongoose from 'mongoose';
 import menuRouter from './routes/menu';
+import noticeRouter from './routes/notice';
 
 const app: Express = express();
 const { PORT, MONGODB_URI } = process.env;
@@ -16,8 +17,10 @@ mongoose
   .then(() => console.log('- Connected to MongoDB'))
   .catch((error: unknown) => console.error(error));
 
+// 라우터
 app.use('/menu', menuRouter);
+app.use('/notice', noticeRouter);
 
 app.listen(PORT, () => {
-  console.log(`- Server is running at https://localhost:${PORT}`);
+  console.log(`- Server is running at http://localhost:${PORT}`);
 });
