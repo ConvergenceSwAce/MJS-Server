@@ -46,7 +46,7 @@ app.use('/manager', managerRouter);
 
 // 에러
 app.use((err: unknown, req: Request, res: Response, next: NextFunction) => {
-  res.status(500).json({ message: 'server error' });
+  res.status(500).json({ message: 'Server Error' });
 });
 
 app.listen(PORT, () => {
