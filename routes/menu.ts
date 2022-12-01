@@ -1,5 +1,5 @@
 import { Request, Response, Router } from 'express';
-import { check, validationResult } from 'express-validator';
+import { body, query, validationResult } from 'express-validator';
 import { MenuDto } from '../interfaces/menuDto';
 import Menu0 from '../models/menu0';
 import Menu10 from '../models/menu10';
@@ -12,9 +12,9 @@ const router = Router();
 router.get(
   '/',
   [
-    check('cafeteria').notEmpty().toInt(),
-    check('start').notEmpty().toDate(),
-    check('end').notEmpty().toDate(),
+    query('cafeteria').notEmpty().toInt(),
+    query('start').notEmpty().toDate(),
+    query('end').notEmpty().toDate(),
   ],
   async (req: Request, res: Response) => {
     const errors = validationResult(req);
@@ -47,7 +47,7 @@ router.get(
       }
     } catch (error: unknown) {
       console.error(error);
-      return res.status(500).json({ error: 'error' });
+      return res.status(500).json({ message: 'Sever Error' });
     }
   },
 );
@@ -56,9 +56,9 @@ router.get(
 router.post(
   '/',
   [
-    check('date').notEmpty().toDate(),
-    check('day').notEmpty(),
-    check('cafeteria').notEmpty().toInt(),
+    body('date').notEmpty().toDate(),
+    body('day').notEmpty().isString(),
+    body('cafeteria').notEmpty().toInt(),
   ],
   async (req: Request, res: Response) => {
     const errors = validationResult(req);
@@ -67,7 +67,7 @@ router.post(
     }
     try {
       const menu: MenuDto = req.body;
-      switch (req.body.cafeteria) {
+      switch (menu.cafeteria) {
         case 0:
           await Menu0.create(menu);
           break;
@@ -84,7 +84,7 @@ router.post(
       return res.json({ message: 'success' });
     } catch (error: unknown) {
       console.error(error);
-      return res.status(500).json({ error: 'error' });
+      return res.status(500).json({ message: 'Sever Error' });
     }
   },
 );
@@ -92,32 +92,32 @@ router.post(
 // 식단 수정
 router.patch(
   '/',
-  [check('_id').notEmpty(), check('cafeteria').notEmpty().toInt()],
+  [body('_id').notEmpty().isMongoId(), body('cafeteria').notEmpty().toInt()],
   async (req: Request, res: Response) => {
-    const { _id, cafeteria, ...menu } = req.body;
+    const { _id, ...updatedMenu } = req.body;
     try {
-      switch (cafeteria) {
+      switch (updatedMenu.cafeteria) {
         case 0:
-          const exMenu0 = await Menu0.findByIdAndUpdate(_id, menu);
+          const exMenu0 = await Menu0.findByIdAndUpdate(_id, updatedMenu);
           if (!exMenu0) throw new Error('식단 정보가 없습니다.');
           break;
         case 10:
-          const exMenu10 = await Menu0.findByIdAndUpdate(_id, menu);
+          const exMenu10 = await Menu0.findByIdAndUpdate(_id, updatedMenu);
           if (!exMenu10) throw new Error('식단 정보가 없습니다.');
           break;
         case 11:
-          const exMenu11 = await Menu0.findByIdAndUpdate(_id, menu);
+          const exMenu11 = await Menu0.findByIdAndUpdate(_id, updatedMenu);
           if (!exMenu11) throw new Error('식단 정보가 없습니다.');
           break;
         case 12:
-          const exMenu12 = await Menu0.findByIdAndUpdate(_id, menu);
+          const exMenu12 = await Menu0.findByIdAndUpdate(_id, updatedMenu);
           if (!exMenu12) throw new Error('식단 정보가 없습니다.');
           break;
       }
       return res.json({ message: 'success' });
     } catch (error: unknown) {
       console.error(error);
-      return res.status(500).json({ error: 'error' });
+      return res.status(500).json({ message: 'Sever Error' });
     }
   },
 );
